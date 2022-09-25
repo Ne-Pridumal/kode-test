@@ -47,13 +47,7 @@ export const workspaceReducer = (state = initState, action: WorkspaceActionType)
   const { type, payload } = action
   switch (type) {
     case WorkspaceAction.SET_PEOPLE:
-      if (payload !== null && payload.length > 0) {
-        return { ...state, people: payload, state: WorkspaceStateLoading.success }
-      }
-      else {
-        return { ...state, people: payload, state: WorkspaceStateLoading.crashed }
-      }
-
+      return { ...state, people: payload }
 
     case WorkspaceAction.SET_STATE:
       return { ...state, state: payload }
