@@ -1,3 +1,4 @@
+import { useDispatch } from 'react-redux'
 import { EWorkspaceDepartments } from '../../types/Department'
 import { EFilter } from '../../types/EFilter'
 import { IPerson } from '../../types/IPerson'
@@ -32,7 +33,7 @@ interface setDepartment {
   payload: EWorkspaceDepartments
 }
 
-type actionType = setPeople | setState | setSearch | setFilter | setDepartment
+export type WorkspaceActionType = setPeople | setState | setSearch | setFilter | setDepartment
 
 const initState: WorkspaceState = {
   people: null,
@@ -42,11 +43,17 @@ const initState: WorkspaceState = {
   filter: EFilter.alphabet
 }
 
-export const workspaceReducer = (state = initState, action: actionType): WorkspaceState => {
+export const workspaceReducer = (state = initState, action: WorkspaceActionType): WorkspaceState => {
   const { type, payload } = action
   switch (type) {
     case WorkspaceAction.SET_PEOPLE:
-      return { ...state, people: payload }
+      if (payload !== null && payload.length > 0) {
+        return { ...state, people: payload, state: WorkspaceStateLoading.success }
+      }
+      else {
+        return { ...state, people: payload, state: WorkspaceStateLoading.crashed }
+      }
+
 
     case WorkspaceAction.SET_STATE:
       return { ...state, state: payload }
@@ -63,3 +70,24 @@ export const workspaceReducer = (state = initState, action: actionType): Workspa
       return state
   }
 }
+
+export const setPeople = (people: IPerson[] | null): setPeople => ({
+  type: WorkspaceAction.SET_PEOPLE,
+  payload: people
+})
+export const setWorkspaceState = (state: WorkspaceStateLoading): setState => ({
+  type: WorkspaceAction.SET_STATE,
+  payload: state
+})
+export const setSearch = (search: string): setSearch => ({
+  type: WorkspaceAction.SET_SEARCH,
+  payload: search
+})
+export const setFilter = (filter: EFilter): setFilter => ({
+  type: WorkspaceAction.SET_FILTER,
+  payload: filter
+})
+export const setDepartment = (department: EWorkspaceDepartments): setDepartment => ({
+  type: WorkspaceAction.SET_DEPARTMENT,
+  payload: department
+})
