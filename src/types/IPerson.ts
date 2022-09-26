@@ -4,6 +4,7 @@ export interface IPerson {
   id: string,
   avatarUrl: string,
   firstName: string,
+  lastName: string,
   userTag: string,
   department: EDepartment,
   position: string,

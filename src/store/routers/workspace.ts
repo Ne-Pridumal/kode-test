@@ -1,4 +1,5 @@
-import { useDispatch } from 'react-redux'
+import { Dispatch } from 'react'
+import { RootState } from '.'
 import { EWorkspaceDepartments } from '../../types/Department'
 import { EFilter } from '../../types/EFilter'
 import { IPerson } from '../../types/IPerson'
@@ -10,6 +11,7 @@ enum WorkspaceAction {
   SET_SEARCH = 'workspace/SET_SEARCH',
   SET_DEPARTMENT = 'workspace/SET_DEPARTMENT',
   SET_FILTER = 'workspace/SET_FILTER',
+  SET_SEARCH_RESULT = 'workspace/SET_SEARCH_RESULT'
 }
 
 interface setPeople {
@@ -20,27 +22,30 @@ interface setState {
   type: WorkspaceAction.SET_STATE,
   payload: WorkspaceStateLoading
 }
-interface setSearch {
-  type: WorkspaceAction.SET_SEARCH,
-  payload: string
-}
 interface setFilter {
   type: WorkspaceAction.SET_FILTER,
-  payload: EFilter
+  payload: {
+    filter: EFilter,
+    sortedPeople: IPerson[]
+  }
 }
 interface setDepartment {
   type: WorkspaceAction.SET_DEPARTMENT,
   payload: EWorkspaceDepartments
 }
+interface setSearchResult {
+  type: WorkspaceAction.SET_SEARCH_RESULT,
+  payload: IPerson[] | null
+}
 
-export type WorkspaceActionType = setPeople | setState | setSearch | setFilter | setDepartment
+export type WorkspaceActionType = setPeople | setState | setFilter | setDepartment | setSearchResult
 
 const initState: WorkspaceState = {
   people: null,
   state: WorkspaceStateLoading.loading,
-  search: '',
   department: EWorkspaceDepartments.all,
-  filter: EFilter.alphabet
+  filter: EFilter.alphabet,
+  searchResult: null,
 }
 
 export const workspaceReducer = (state = initState, action: WorkspaceActionType): WorkspaceState => {
@@ -52,14 +57,15 @@ export const workspaceReducer = (state = initState, action: WorkspaceActionType)
     case WorkspaceAction.SET_STATE:
       return { ...state, state: payload }
 
-    case WorkspaceAction.SET_SEARCH:
-      return { ...state, search: payload }
-
     case WorkspaceAction.SET_FILTER:
-      return { ...state, filter: payload }
+      return { ...state, filter: payload.filter, people: payload.sortedPeople }
 
     case WorkspaceAction.SET_DEPARTMENT:
       return { ...state, department: payload }
+
+    case WorkspaceAction.SET_SEARCH_RESULT:
+      return { ...state, searchResult: payload }
+
     default:
       return state
   }
@@ -73,15 +79,66 @@ export const setWorkspaceState = (state: WorkspaceStateLoading): setState => ({
   type: WorkspaceAction.SET_STATE,
   payload: state
 })
-export const setSearch = (search: string): setSearch => ({
-  type: WorkspaceAction.SET_SEARCH,
-  payload: search
-})
-export const setFilter = (filter: EFilter): setFilter => ({
-  type: WorkspaceAction.SET_FILTER,
-  payload: filter
-})
 export const setDepartment = (department: EWorkspaceDepartments): setDepartment => ({
   type: WorkspaceAction.SET_DEPARTMENT,
   payload: department
 })
+export const setSearchResult = (search: string) => (dispatch: Dispatch<WorkspaceActionType>, getState: () => RootState) => {
+  const state = getState()
+  let filteredPeople
+  if (state.workspace.people) {
+    filteredPeople = state.workspace.people?.filter((person: IPerson) => {
+      const personFullName = `${person.firstName} ${person.lastName}`
+      if (personFullName.includes(search) || person.phone.includes(search)) {
+        return person
+      }
+    })
+  }
+  else {
+    filteredPeople = state.workspace.people
+  }
+
+  dispatch({
+    type: WorkspaceAction.SET_SEARCH_RESULT,
+    payload: filteredPeople
+  })
+}
+export const filterByParam = (param: EFilter) => (dispatch: Dispatch<WorkspaceActionType>, getState: () => RootState) => {
+  const state = getState()
+  const people = state.workspace.people
+  if (!people) {
+    throw new Error('no people')
+  }
+  let sortedPeople
+  if (param === EFilter.alphabet) {
+    sortedPeople = people.sort((a: IPerson, b: IPerson) => {
+      const aPersonFullName = a.firstName + a.lastName
+      const bPersonFullName = b.firstName + b.lastName
+      return (
+        aPersonFullName > bPersonFullName
+          ? 1
+          : bPersonFullName > aPersonFullName
+            ? -1
+            : 0
+      )
+    })
+  }
+  if (param === EFilter.birthday) {
+    sortedPeople = people.sort((a: IPerson, b: IPerson) => a.birthday > b.birthday
+      ? 1
+      : b.birthday > a.birthday
+        ? -1
+        : 0)
+  }
+  else {
+    sortedPeople = people
+  }
+  console.log({ 'sortedPeople': sortedPeople })
+  dispatch({
+    type: WorkspaceAction.SET_FILTER,
+    payload: {
+      filter: param,
+      sortedPeople
+    }
+  })
+}
