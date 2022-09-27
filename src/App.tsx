@@ -1,17 +1,22 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { useAppDispatch, useAppSelector } from './hooks/useReduxHooks';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import Home from './components/Home';
+import User from './components/User';
 
 function App() {
-  const { allPeopleQuery } = useAppDispatch()
-  const selector = useAppSelector(state => state.workspace)
-  console.log(selector)
   return (
-    <div className="App">
-      <button onClick={() => {
-        allPeopleQuery();
-      }}>test</button>
-    </div>
+    <Router>
+      <Routes>
+        <Route
+          index
+          element={<Home />}
+        />
+        <Route
+          path='/user'
+          element={<User />}
+        />
+      </Routes>
+    </Router>
   );
 }
 

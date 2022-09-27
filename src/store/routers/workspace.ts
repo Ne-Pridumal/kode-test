@@ -133,7 +133,6 @@ export const filterByParam = (param: EFilter) => (dispatch: Dispatch<WorkspaceAc
   else {
     sortedPeople = people
   }
-  console.log({ 'sortedPeople': sortedPeople })
   dispatch({
     type: WorkspaceAction.SET_FILTER,
     payload: {
