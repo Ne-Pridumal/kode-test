@@ -1,3 +1,17 @@
-.home{
-  padding: 0 1.6rem;
+@import '../../globalStyles/vars.css';
+
+.home {
+  width: 100%;
+}
+
+.home >div{
+  margin: 0 16px;
+  width: auto;
+}
+.home >h2 {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 28px;
+  color: var(--black);
+  margin: 16px auto 12px 24px;
 }

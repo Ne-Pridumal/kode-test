@@ -1,0 +1,56 @@
+@import '../../globalStyles/vars.css';
+
+.user-list{
+  margin-top: 16px;
+}
+
+.user-container {
+  width: 100%;
+  height: 80px;
+  padding: 6px 0 2px 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1.6rem;
+}
+
+.user__image-container {
+  width: 72px;
+  height: 72px;
+}
+.user__image-container img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.user__info-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.user__name {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--black);
+}
+
+.user__tag{
+  text-transform: lowercase;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  color: var(--light-gray);
+}
+
+.user__department{
+  width: 100%;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px; 
+  color: var(--gray-text);
+  text-transform: capitalize;
+}

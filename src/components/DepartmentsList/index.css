@@ -1,0 +1,39 @@
+@import '../../globalStyles/vars.css';
+
+.home .departments-container {
+  margin: 8px 0px 0px 0px;
+  display: flex;
+  border-bottom: 1px solid #c3c3c6;
+  overflow: auto;
+}
+
+.departments-container::-webkit-scrollbar{
+  height: 10px;
+}
+.departments-container::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+.departments-container::-webkit-scrollbar-thumb {
+  background-color: var(--purple);
+  border-radius: 1000px;
+  box-shadow: var(--light-gray);
+}
+
+.department{
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 20px;
+  text-transform: capitalize;
+  padding: 8px 12px;
+  color: var(--light-gray);
+  border-bottom: 1px solid rgba(0,0,0,0);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.department_active {
+  font-weight: 600;
+  transition: all 0.3s;
+  border-bottom: 1px solid var(--purple);
+  color: var(--black);
+}
