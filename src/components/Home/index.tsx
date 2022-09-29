@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo } from "react";
+import { FC, useEffect, } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/useReduxHooks";
 import { EWorkspaceDepartments } from "../../types/Department";
 import { WorkspaceStateLoading } from "../../types/WorkspaceState";
@@ -9,7 +9,7 @@ import './index.css'
 
 const Home: FC = () => {
   const { peopleDepartmentQuery, allPeopleQuery } = useAppDispatch()
-  const { people, state, department } = useAppSelector(state => state.workspace)
+  const { people, state, department, searchResult } = useAppSelector(state => state.workspace)
   useEffect(() => {
     if (department === EWorkspaceDepartments.all) {
       allPeopleQuery()
@@ -18,6 +18,7 @@ const Home: FC = () => {
       peopleDepartmentQuery(department)
     }
   }, [department])
+
   return (
     <div className="home">
       <h2 className="home__title">
@@ -25,11 +26,15 @@ const Home: FC = () => {
       </h2>
       <SearchInput />
       <DepartmentsList />
-      {state === WorkspaceStateLoading.success && people &&
-        <UsersList
-          people={people}
-        />
-      }
+      {state === WorkspaceStateLoading.success && people && (
+        !!searchResult ?
+          <UsersList
+            people={searchResult}
+          /> :
+          <UsersList
+            people={people}
+          />
+      )}
     </div>
   )
 }

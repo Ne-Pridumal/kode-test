@@ -13,4 +13,5 @@ export interface WorkspaceState {
   department: EWorkspaceDepartments,
   filter: EFilter,
   searchResult: IPerson[] | null,
+  searchInput: string,
 }

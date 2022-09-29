@@ -2,6 +2,9 @@
 
 .home {
   width: 100%;
+  height: 100vh;
+  padding-top: 16px;
+  position: relative;
 }
 
 .home >div{
@@ -13,5 +16,5 @@
   font-size: 24px;
   line-height: 28px;
   color: var(--black);
-  margin: 16px auto 12px 24px;
+  margin: 0 auto 12px 24px;
 }

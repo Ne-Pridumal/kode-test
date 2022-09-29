@@ -2,7 +2,8 @@ import axios from "axios"
 import { EWorkspaceDepartments } from "../../types/Department"
 import { EFilter } from "../../types/EFilter"
 import { WorkspaceStateLoading } from "../../types/WorkspaceState"
-import { filterByParam, setDepartment, setPeople, setWorkspaceState } from "../routers/workspace"
+import { setDepartment, setPeople, setWorkspaceState } from "../routers/workspace"
+import { filterByParam } from "./workspaceActions"
 
 export const allPeopleQuery = () => {
   return async (dispatch: any) => {
@@ -42,3 +43,4 @@ export const peopleDepartmentQuery = (department: EWorkspaceDepartments) => {
     }
   }
 }
+

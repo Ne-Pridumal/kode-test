@@ -1,6 +1,11 @@
 @import '../../globalStyles/vars.css';
 
 .user-list{
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   margin-top: 16px;
 }
 
@@ -53,4 +58,28 @@
   line-height: 16px; 
   color: var(--gray-text);
   text-transform: capitalize;
+}
+.empty-result{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin-bottom: 8px;
+}
+.empty-result__title{
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 22px;
+  color: var(--black);
+  margin-bottom: 12px;
+}
+.empty-result__subtitle{
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--light-gray);
 }
