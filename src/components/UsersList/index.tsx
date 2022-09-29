@@ -1,17 +1,15 @@
 import { FC } from 'react'
 import { IPerson } from '../../types/IPerson'
-import { WorkspaceStateLoading } from '../../types/WorkspaceState'
 import './index.css'
 
 interface IUserList {
-  people: IPerson[] | null,
-  loadingState: WorkspaceStateLoading
+  people: IPerson[]
 }
 
-const UsersList: FC<IUserList> = ({ people, loadingState }) => {
+const UsersList: FC<IUserList> = ({ people }) => {
   return (
     <div className='user-list'>
-      {loadingState === WorkspaceStateLoading.success && people?.map((person: IPerson, index: number) => {
+      {people.map((person: IPerson, index: number) => {
         return (
           <div className='user-container' key={person.id + index}>
             <div className='user__image-container'>

@@ -1,16 +1,23 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/useReduxHooks";
+import { EWorkspaceDepartments } from "../../types/Department";
+import { WorkspaceStateLoading } from "../../types/WorkspaceState";
 import DepartmentsList from "../DepartmentsList";
 import SearchInput from "../SearchInput";
 import UsersList from "../UsersList";
 import './index.css'
 
 const Home: FC = () => {
-  const { allPeopleQuery } = useAppDispatch()
-  const { people, state } = useAppSelector(state => state.workspace)
+  const { peopleDepartmentQuery, allPeopleQuery } = useAppDispatch()
+  const { people, state, department } = useAppSelector(state => state.workspace)
   useEffect(() => {
-    allPeopleQuery()
-  }, [])
+    if (department === EWorkspaceDepartments.all) {
+      allPeopleQuery()
+    }
+    else {
+      peopleDepartmentQuery(department)
+    }
+  }, [department])
   return (
     <div className="home">
       <h2 className="home__title">
@@ -18,10 +25,11 @@ const Home: FC = () => {
       </h2>
       <SearchInput />
       <DepartmentsList />
-      <UsersList
-        people={people}
-        loadingState={state}
-      />
+      {state === WorkspaceStateLoading.success && people &&
+        <UsersList
+          people={people}
+        />
+      }
     </div>
   )
 }

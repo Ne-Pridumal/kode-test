@@ -8,9 +8,11 @@ export const allPeopleQuery = () => {
   return async (dispatch: any) => {
     try {
       dispatch(setWorkspaceState(WorkspaceStateLoading.loading))
-      const response = await axios.get('https://stoplight.io/mocks/kode-frontend-team/koder-stoplight/86566464/users', {
+      const response = await axios.get(
+        'https://stoplight.io/mocks/kode-frontend-team/koder-stoplight/86566464/users', {
         params: { __dynamic: true }
       })
+      dispatch(setDepartment(EWorkspaceDepartments.all))
       dispatch(setPeople(response.data.items))
       dispatch(filterByParam(EFilter.alphabet))
       dispatch(setWorkspaceState(WorkspaceStateLoading.success))
@@ -29,8 +31,8 @@ export const peopleDepartmentQuery = (department: EWorkspaceDepartments) => {
       const response = await axios.get('https://stoplight.io/mocks/kode-frontend-team/koder-stoplight/86566464/users', {
         params: { __dynamic: true, __example: department }
       })
-      dispatch(setPeople(response.data.items))
       dispatch(setDepartment(department))
+      dispatch(setPeople(response.data.items))
       dispatch(filterByParam(EFilter.alphabet))
       dispatch(setWorkspaceState(WorkspaceStateLoading.success))
     }

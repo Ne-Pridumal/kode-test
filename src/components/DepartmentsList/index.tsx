@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from "react";
-import { useAppDispatch } from "../../hooks/useReduxHooks";
+import { useDispatch } from "react-redux";
+import { setDepartment } from "../../store/routers/workspace";
 import { EWorkspaceDepartments } from '../../types/Department'
 import './index.css'
 
@@ -7,10 +8,10 @@ const departmentsList = Object.values(EWorkspaceDepartments)
 
 const DepartmentsList: FC = () => {
   const [activeDepartment, setActiveDepartment] = useState<EWorkspaceDepartments>(EWorkspaceDepartments.all)
-  const { peopleDepartmentQuery } = useAppDispatch()
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    peopleDepartmentQuery(activeDepartment)
+    dispatch(setDepartment(activeDepartment))
   }, [activeDepartment])
 
   return (
