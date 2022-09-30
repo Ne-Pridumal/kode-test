@@ -14,4 +14,5 @@ export interface WorkspaceState {
   filter: EFilter,
   searchResult: IPerson[] | null,
   searchInput: string,
+  displayFilter: boolean,
 }

@@ -9,7 +9,8 @@ export enum WorkspaceAction {
   SET_SEARCH = 'workspace/SET_SEARCH',
   SET_DEPARTMENT = 'workspace/SET_DEPARTMENT',
   SET_FILTER = 'workspace/SET_FILTER',
-  SET_SEARCH_RESULT = 'workspace/SET_SEARCH_RESULT'
+  SET_SEARCH_RESULT = 'workspace/SET_SEARCH_RESULT',
+  SET_FILTER_DISPLAY = 'workspace/SET_FILTER_DISPLAY'
 }
 
 interface setPeople {
@@ -38,8 +39,12 @@ interface setSearchResult {
     searchInput: string
   }
 }
+interface setFilterDiplay {
+  type: WorkspaceAction.SET_FILTER_DISPLAY,
+  payload: boolean
+}
 
-export type WorkspaceActionType = setPeople | setState | setFilter | setDepartment | setSearchResult
+export type WorkspaceActionType = setPeople | setState | setFilter | setDepartment | setSearchResult | setFilterDiplay
 
 const initState: WorkspaceState = {
   people: null,
@@ -48,6 +53,7 @@ const initState: WorkspaceState = {
   filter: EFilter.alphabet,
   searchResult: null,
   searchInput: '',
+  displayFilter: false,
 }
 
 export const workspaceReducer = (state = initState, action: WorkspaceActionType): WorkspaceState => {
@@ -60,14 +66,24 @@ export const workspaceReducer = (state = initState, action: WorkspaceActionType)
       return { ...state, state: payload }
 
     case WorkspaceAction.SET_FILTER:
-      return { ...state, filter: payload.filter, people: payload.sortedPeople }
+      return {
+        ...state,
+        filter: payload.filter,
+        people: payload.sortedPeople,
+      }
 
     case WorkspaceAction.SET_DEPARTMENT:
       return { ...state, department: payload }
 
     case WorkspaceAction.SET_SEARCH_RESULT:
-      return { ...state, searchResult: payload.filteredPeople, searchInput: payload.searchInput }
+      return {
+        ...state,
+        searchResult: payload.filteredPeople,
+        searchInput: payload.searchInput
+      }
 
+    case WorkspaceAction.SET_FILTER_DISPLAY:
+      return { ...state, displayFilter: payload }
     default:
       return state
   }
@@ -84,4 +100,8 @@ export const setWorkspaceState = (state: WorkspaceStateLoading): setState => ({
 export const setDepartment = (department: EWorkspaceDepartments): setDepartment => ({
   type: WorkspaceAction.SET_DEPARTMENT,
   payload: department
+})
+export const setFilterDiplay = (state: boolean): setFilterDiplay => ({
+  type: WorkspaceAction.SET_FILTER_DISPLAY,
+  payload: state
 })

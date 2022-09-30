@@ -1,13 +1,14 @@
-import { FC, useMemo, useRef } from "react";
+import { FC } from "react";
 import { ReactComponent as SearchIcon } from '../../assets/SearchIcon.svg'
-import { ReactComponent as ShowFilterIcon } from '.../../assets/ShowFilterIcon.svg'
+import { ReactComponent as ShowFilterIcon } from '../../assets/ShowFilterIcon.svg'
 import './index.css'
+import { useAppDispatch } from "../../hooks/useReduxHooks";
 import { useDispatch } from "react-redux";
-import { useAppDispatch, useAppSelector } from "../../hooks/useReduxHooks";
+import { setFilterDiplay } from "../../store/routers/workspace";
 
 const SearchInput: FC = () => {
   const { filterBySearch } = useAppDispatch()
-  const { people } = useAppSelector(state => state.workspace)
+  const dispatch = useDispatch()
   return (
     <div className="search">
       <SearchIcon />
@@ -16,6 +17,12 @@ const SearchInput: FC = () => {
         placeholder="Введи имя, тег, почту..."
         onChange={(e) => filterBySearch(e.target.value)}
       />
+      <button
+        className="search__filter-button"
+        onClick={() => { dispatch(setFilterDiplay(true)) }}
+      >
+        <ShowFilterIcon />
+      </button>
     </div>
   )
 }
