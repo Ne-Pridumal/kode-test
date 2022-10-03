@@ -1,10 +1,10 @@
 import { FC, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setDepartment } from "../../store/routers/workspace";
-import { EWorkspaceDepartments } from '../../types/Department'
+import { EWorkspaceDepartments, verstkaDepartmentsList } from '../../types/Department'
 import './index.css'
 
-const departmentsList = Object.values(EWorkspaceDepartments)
+
 
 const DepartmentsList: FC = () => {
   const [activeDepartment, setActiveDepartment] = useState<EWorkspaceDepartments>(EWorkspaceDepartments.all)
@@ -16,18 +16,18 @@ const DepartmentsList: FC = () => {
 
   return (
     <div className="departments-container">
-      {departmentsList.map((department: EWorkspaceDepartments) => {
+      {verstkaDepartmentsList.map((department) => {
         return (
           <div
             className={
-              activeDepartment === department
+              activeDepartment === department[1]
                 ? `department department_active`
                 : `department`
             }
-            key={department}
-            onClick={() => setActiveDepartment(department)}
+            key={department[0]}
+            onClick={() => setActiveDepartment(department[1])}
           >
-            {department === 'all' ? 'все' : department.replace(/_/, ' ')}
+            {department[0]}
           </div>
         )
       })}

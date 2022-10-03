@@ -48,11 +48,25 @@ export const filterByParam = (param: EFilter) => (dispatch: Dispatch<WorkspaceAc
     })
   }
   if (param === EFilter.birthday) {
-    sortedPeople = people.sort((a: IPerson, b: IPerson) => a.birthday > b.birthday
-      ? 1
-      : b.birthday > a.birthday
-        ? -1
-        : 0)
+    sortedPeople = people.sort((a: IPerson, b: IPerson) => {
+      const aDate = new Date(a.birthday)
+      const bDate = new Date(b.birthday)
+      const nowDate = new Date()
+      const newADate = new Date(nowDate.getUTCFullYear(), aDate.getUTCMonth(), aDate.getUTCDate())
+      const newBDate = new Date(nowDate.getUTCFullYear(), bDate.getUTCMonth(), bDate.getUTCDate())
+      if (newBDate < nowDate) {
+        newBDate.setFullYear(nowDate.getUTCFullYear() + 1)
+      }
+      if (newADate < nowDate) {
+        newADate.setFullYear(nowDate.getUTCFullYear() + 1)
+      }
+
+      return newADate > newBDate
+        ? 1
+        : newADate === newBDate
+          ? 0
+          : -1
+    })
   }
   else {
     sortedPeople = people

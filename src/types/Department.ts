@@ -28,3 +28,19 @@ export enum EWorkspaceDepartments {
   support = 'support',
   analytics = 'analytics'
 }
+
+export const verstkaDepartmentsList: Array<[string, EWorkspaceDepartments]> = [
+  ['Все', EWorkspaceDepartments.all],
+  ['Android', EWorkspaceDepartments.android],
+  ['iOS', EWorkspaceDepartments.ios],
+  ['Дизайн', EWorkspaceDepartments.design],
+  ['Менеджмент', EWorkspaceDepartments.management],
+  ['QA', EWorkspaceDepartments.QA],
+  ['Бэк-оффис', EWorkspaceDepartments.backOffice],
+  ['Frontend', EWorkspaceDepartments.frontend],
+  ['HR', EWorkspaceDepartments.HR],
+  ['PR', EWorkspaceDepartments.PR],
+  ['Backend', EWorkspaceDepartments.backend],
+  ['Техподдержка', EWorkspaceDepartments.support],
+  ['Аналитика', EWorkspaceDepartments.analytics]
+]
