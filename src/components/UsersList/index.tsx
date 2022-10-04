@@ -1,23 +1,32 @@
-import { FC, useState, createContext, useEffect } from 'react'
+import { FC, SyntheticEvent, } from 'react'
 import { IPerson } from '../../types/IPerson'
-import { verstkaDepartmentsList } from '../../types/Department'
 import EmptyResult from './EmptyResult'
-import './index.css'
 import { useAppSelector } from '../../hooks/useReduxHooks'
 import { EFilter } from '../../types/EFilter'
 import Separator from './Separator'
+import { WorkspaceStateLoading } from '../../types/WorkspaceState'
+import LoadingResult from './LoadingResult'
+
+import AltImage from '../../assets/Alt.png'
+import './index.css'
 
 interface IUserList {
-  people: IPerson[]
+  people: IPerson[] | null
 }
 
+
 const UsersList: FC<IUserList> = ({ people }) => {
-  const { filter } = useAppSelector(state => state.workspace)
+  const { filter, state } = useAppSelector(state => state.workspace)
   const nowMonth = new Date().getUTCMonth()
   const nowDay = new Date().getUTCDate()
+  const imgErrorHandler = (e: SyntheticEvent<HTMLImageElement, Event>) => {
+    const { currentTarget } = e
+    currentTarget.onerror = null
+    currentTarget.src = AltImage
+  }
   return (
-    <div className='user-list'>
-      {people.length > 0
+    <div className='user-list default-margin'>
+      {state === WorkspaceStateLoading.success && people && (people.length > 0
         ? people.map((person: IPerson, index: number) => {
           const personDate = new Date(person.birthday)
           const nextPersonDate = people[index + 1] ? new Date(people[index + 1].birthday) : null
@@ -25,7 +34,8 @@ const UsersList: FC<IUserList> = ({ people }) => {
             <div className='user'>
               <div className='user-container' key={person.id}>
                 <div className='user__image-container'>
-                  <img src={person.avatarUrl} />
+                  <img src={person.avatarUrl}
+                    onError={imgErrorHandler} />
                 </div>
                 <div className='user__info-container'>
                   <p
@@ -58,8 +68,11 @@ const UsersList: FC<IUserList> = ({ people }) => {
             </div>
           )
         })
-        : <EmptyResult />
+        : <EmptyResult />)
       }
+      {state === WorkspaceStateLoading.loading && (
+        <LoadingResult />
+      )}
     </div>
   )
 }

@@ -10,7 +10,7 @@ const SearchInput: FC = () => {
   const { filterBySearch } = useAppDispatch()
   const dispatch = useDispatch()
   return (
-    <div className="search">
+    <div className="search default-margin">
       <SearchIcon />
       <input
         className="search__input"

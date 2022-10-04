@@ -1,0 +1,36 @@
+.top-bar{
+
+}
+
+.top-bar__title {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 28px;
+  margin: 0 auto 12px 24px;
+}
+.top-bar__state{
+  padding-top: 16px;
+}
+
+.top-bar__state_unloading{
+  background-color: var(--white);
+  color: var(--black);
+}
+.top-bar__state_loading{
+  background-color: var(--purple);
+  color: var(--white);
+}
+.top-bar__state_crashed {
+  background-color: var(--red);
+  color: var(--white);
+}
+
+.top-bar__loading-placeholder{
+  height: 32px;
+  margin: 8px auto 12px 24px;
+  padding-bottom: 12px;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
+}
+

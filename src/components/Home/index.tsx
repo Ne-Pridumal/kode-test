@@ -5,6 +5,7 @@ import { WorkspaceStateLoading } from "../../types/WorkspaceState";
 import DepartmentsList from "../DepartmentsList";
 import FilterModal from "../FilterModal";
 import SearchInput from "../SearchInput";
+import TopBar from "../TopBar";
 import UsersList from "../UsersList";
 import './index.css'
 
@@ -22,20 +23,15 @@ const Home: FC = () => {
 
   return (
     <div className="home">
-      <h2 className="home__title">
-        Поиск
-      </h2>
-      <SearchInput />
-      <DepartmentsList />
-      {state === WorkspaceStateLoading.success && people && (
-        !!searchResult ?
-          <UsersList
-            people={searchResult}
-          /> :
-          <UsersList
-            people={people}
-          />
-      )}
+      <TopBar />
+      {!!searchResult ?
+        <UsersList
+          people={searchResult}
+        /> :
+        <UsersList
+          people={people}
+        />
+      }
       {displayFilter && (
         <FilterModal />
       )}

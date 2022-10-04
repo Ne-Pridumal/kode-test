@@ -118,3 +118,19 @@
   height: 1px;
   background-color: #c3c3c6;
 }
+
+
+.user_loading-result .user__name,
+.user_loading-result .user__position,
+.user_loading-result .user__image-container{
+  background: linear-gradient(90deg, #F3F3F6 0%, #FAFAFA 100%);
+  border-radius: 50px;
+}
+.user_loading-result .user__name {
+  width: 144px;
+  height: 16px;
+}
+.user_loading-result .user__position {
+  width: 80px;
+  height: 12px;
+}

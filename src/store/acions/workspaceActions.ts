@@ -11,8 +11,8 @@ export const filterBySearch = (search: string | undefined) => (dispatch: Dispatc
   if (state.workspace.people && search) {
     searchInput = search
     filteredPeople = state.workspace.people.filter((person: IPerson) => {
-      const personFullName = `${person.firstName} ${person.lastName}`
-      if (personFullName.includes(search) || person.phone.includes(search)) {
+      const personFullName = `${person.firstName} ${person.lastName}`.toLowerCase()
+      if (personFullName.includes(search.toLowerCase()) || person.phone.includes(search)) {
         return person
       }
     })
