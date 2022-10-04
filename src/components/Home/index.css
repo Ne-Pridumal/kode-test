@@ -2,18 +2,10 @@
 .home {
   width: 100%;
   min-height: 100vh;
-  padding-top: 16px;
   position: relative;
 }
 
-.home >div{
+.default-margin {
   margin: 0 16px;
   width: auto;
-}
-.home >h2 {
-  font-weight: 700;
-  font-size: 24px;
-  line-height: 28px;
-  color: var(--black);
-  margin: 0 auto 12px 24px;
 }

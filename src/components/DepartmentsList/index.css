@@ -1,5 +1,6 @@
 .home .departments-container {
-  margin: 8px 0px 0px 0px;
+  padding: 0 16px;
+  margin: 8px 0px 0px 0px !important;
   display: flex;
   border-bottom: 1px solid #c3c3c6;
   overflow: auto;
