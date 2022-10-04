@@ -27,15 +27,14 @@ const Home: FC = () => {
       </h2>
       <SearchInput />
       <DepartmentsList />
-      {state === WorkspaceStateLoading.success && people && (
-        !!searchResult ?
-          <UsersList
-            people={searchResult}
-          /> :
-          <UsersList
-            people={people}
-          />
-      )}
+      {!!searchResult ?
+        <UsersList
+          people={searchResult}
+        /> :
+        <UsersList
+          people={people}
+        />
+      }
       {displayFilter && (
         <FilterModal />
       )}

@@ -3,6 +3,7 @@ import { EWorkspaceDepartments } from "../../types/Department"
 import { EFilter } from "../../types/EFilter"
 import { IPerson } from '../../types/IPerson'
 import { WorkspaceStateLoading } from "../../types/WorkspaceState"
+import { RootState } from "../routers"
 import { setDepartment, setPeople, setWorkspaceState } from "../routers/workspace"
 import { filterByParam } from "./workspaceActions"
 
@@ -11,7 +12,8 @@ interface IResponse {
 }
 
 export const allPeopleQuery = () => {
-  return async (dispatch: any) => {
+  return async (dispatch: any, useState: () => RootState) => {
+    const { filter } = useState().workspace
     try {
       dispatch(setWorkspaceState(WorkspaceStateLoading.loading))
       const response = await axios.get<IResponse>(
@@ -20,7 +22,7 @@ export const allPeopleQuery = () => {
       })
       dispatch(setDepartment(EWorkspaceDepartments.all))
       dispatch(setPeople(response.data.items))
-      dispatch(filterByParam(EFilter.alphabet))
+      dispatch(filterByParam(filter))
       dispatch(setWorkspaceState(WorkspaceStateLoading.success))
     }
     catch (e) {
@@ -31,7 +33,8 @@ export const allPeopleQuery = () => {
 }
 
 export const peopleDepartmentQuery = (department: EWorkspaceDepartments) => {
-  return async (dispatch: any) => {
+  return async (dispatch: any, useState: () => RootState) => {
+    const { filter } = useState().workspace
     try {
       dispatch(setWorkspaceState(WorkspaceStateLoading.loading))
       const response = await axios.get<IResponse>('https://stoplight.io/mocks/kode-frontend-team/koder-stoplight/86566464/users', {
@@ -39,7 +42,7 @@ export const peopleDepartmentQuery = (department: EWorkspaceDepartments) => {
       })
       dispatch(setDepartment(department))
       dispatch(setPeople(response.data.items))
-      dispatch(filterByParam(EFilter.alphabet))
+      dispatch(filterByParam(filter))
       dispatch(setWorkspaceState(WorkspaceStateLoading.success))
     }
     catch (e) {

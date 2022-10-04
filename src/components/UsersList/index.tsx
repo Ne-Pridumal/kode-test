@@ -1,23 +1,25 @@
-import { FC, useState, createContext, useEffect } from 'react'
+import { FC, } from 'react'
 import { IPerson } from '../../types/IPerson'
-import { verstkaDepartmentsList } from '../../types/Department'
 import EmptyResult from './EmptyResult'
 import './index.css'
 import { useAppSelector } from '../../hooks/useReduxHooks'
 import { EFilter } from '../../types/EFilter'
 import Separator from './Separator'
+import { WorkspaceStateLoading } from '../../types/WorkspaceState'
+import LoadingResult from './LoadingResult'
 
 interface IUserList {
-  people: IPerson[]
+  people: IPerson[] | null
 }
 
+
 const UsersList: FC<IUserList> = ({ people }) => {
-  const { filter } = useAppSelector(state => state.workspace)
+  const { filter, state } = useAppSelector(state => state.workspace)
   const nowMonth = new Date().getUTCMonth()
   const nowDay = new Date().getUTCDate()
   return (
     <div className='user-list'>
-      {people.length > 0
+      {state === WorkspaceStateLoading.success && people && (people.length > 0
         ? people.map((person: IPerson, index: number) => {
           const personDate = new Date(person.birthday)
           const nextPersonDate = people[index + 1] ? new Date(people[index + 1].birthday) : null
@@ -58,8 +60,11 @@ const UsersList: FC<IUserList> = ({ people }) => {
             </div>
           )
         })
-        : <EmptyResult />
+        : <EmptyResult />)
       }
+      {state === WorkspaceStateLoading.loading && (
+        <LoadingResult />
+      )}
     </div>
   )
 }
