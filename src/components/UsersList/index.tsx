@@ -9,6 +9,7 @@ import LoadingResult from './LoadingResult'
 
 import AltImage from '../../assets/Alt.png'
 import './index.css'
+import { Link } from 'react-router-dom'
 
 interface IUserList {
   people: IPerson[] | null
@@ -24,6 +25,7 @@ const UsersList: FC<IUserList> = ({ people }) => {
     currentTarget.onerror = null
     currentTarget.src = AltImage
   }
+
   return (
     <div className='user-list default-margin'>
       {state === WorkspaceStateLoading.success && people && (people.length > 0
@@ -33,11 +35,11 @@ const UsersList: FC<IUserList> = ({ people }) => {
           return (
             <div className='user'>
               <div className='user-container' key={person.id}>
-                <div className='user__image-container'>
+                <Link to={`/user/${person.id}`} className='user__image-container'>
                   <img src={person.avatarUrl}
                     onError={imgErrorHandler} />
-                </div>
-                <div className='user__info-container'>
+                </Link>
+                <Link to={`/user/${person.id}`} className='user__info-container'>
                   <p
                     className='user__name'
                   >
@@ -53,10 +55,12 @@ const UsersList: FC<IUserList> = ({ people }) => {
                   >
                     {person.position}
                   </p>
-                </div>
+                </Link>
                 {filter === EFilter.birthday && (
                   <div className='user__birthday'>
-                    {`${personDate.getDate()} ${personDate.toLocaleString(undefined, { month: 'short' })}`}
+                    {personDate.toLocaleString(undefined, {
+                      day: 'numeric', month: 'short'
+                    })}
                   </div>
                 )}
                 {(filter === EFilter.birthday && nextPersonDate

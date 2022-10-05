@@ -13,12 +13,7 @@ const Home: FC = () => {
   const { peopleDepartmentQuery, allPeopleQuery } = useAppDispatch()
   const { people, state, department, searchResult, displayFilter } = useAppSelector(state => state.workspace)
   useEffect(() => {
-    if (department === EWorkspaceDepartments.all) {
-      allPeopleQuery()
-    }
-    else {
-      peopleDepartmentQuery(department)
-    }
+    peopleDepartmentQuery(department)
   }, [department])
 
   return (
