@@ -5,7 +5,7 @@ import { IPerson } from '../../types/IPerson'
 import { WorkspaceStateLoading } from "../../types/WorkspaceState"
 import { RootState } from "../routers"
 import { setDepartment, setPeople, setWorkspaceState } from "../routers/workspace"
-import { filterByParam } from "./workspaceActions"
+import { filterByParam, filterBySearch } from "./workspaceActions"
 
 interface IResponse {
   items: IPerson[]
@@ -23,6 +23,7 @@ export const allPeopleQuery = () => {
       dispatch(setDepartment(EWorkspaceDepartments.all))
       dispatch(setPeople(response.data.items))
       dispatch(filterByParam(filter))
+      dispatch(filterBySearch(undefined))
       dispatch(setWorkspaceState(WorkspaceStateLoading.success))
     }
     catch (e) {
@@ -43,6 +44,7 @@ export const peopleDepartmentQuery = (department: EWorkspaceDepartments) => {
       dispatch(setDepartment(department))
       dispatch(setPeople(response.data.items))
       dispatch(filterByParam(filter))
+      dispatch(filterBySearch(undefined))
       dispatch(setWorkspaceState(WorkspaceStateLoading.success))
     }
     catch (e) {
