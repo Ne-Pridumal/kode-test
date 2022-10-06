@@ -1,11 +1,13 @@
-import { FC, useEffect } from "react";
+import { FC, SyntheticEvent, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/useReduxHooks";
 import { ReactComponent as BackArrow } from '../../assets/ArrowLeftIcon.svg'
 import { ReactComponent as StarIcon } from '../../assets/StarIcon.svg'
 import { ReactComponent as PhoneIcon } from '../../assets/PhoneIcon.svg'
+import AltImage from '../../assets/Alt.png'
 
 import './index.css'
+import { WorkspaceStateLoading } from "../../types/WorkspaceState";
 
 const User: FC = () => {
   const { id } = useParams()
@@ -18,6 +20,12 @@ const User: FC = () => {
   const personDate = !!details.birthday ? new Date(details.birthday) : null
   const yearDiffMS = personDate ? new Date().getTime() - personDate.getTime() : null
   const yearDiff = yearDiffMS ? Math.abs(new Date(yearDiffMS).getFullYear() - 1970) : null
+  const imgErrorHandler = (e: SyntheticEvent<HTMLImageElement, Event>) => {
+    const { currentTarget } = e
+    currentTarget.onerror = null
+    currentTarget.src = AltImage
+  }
+
   return (
     <div className="details">
       <div className="top-bar">
@@ -28,7 +36,9 @@ const User: FC = () => {
         </div>
         <div className="top-bar__content">
           <div className="details__image-container">
-            <img src={details.avatarUrl} />
+            {state === WorkspaceStateLoading.success &&
+              <img src={details.avatarUrl} onError={imgErrorHandler} />
+            }
           </div>
           <div className="details__info-container">
             <p className="details__name">
@@ -58,9 +68,9 @@ const User: FC = () => {
           </li>
           <li className="main-info__list-item">
             <PhoneIcon />
-            <p>
+            <a href={`tel:${details.phone}`}>
               {details.phone}
-            </p>
+            </a>
           </li>
         </ul>
       </div>

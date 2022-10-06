@@ -73,12 +73,21 @@
   line-height: 20px;
   color: var(--black);
 }
-.main-info__list-item p {
+.main-info__list-item p{
   margin-left: 14px;
   flex: 1;
   display: flex;
   justify-content: space-between;
 }
+.main-info__list-item a {
+  margin-left: 14px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  text-decoration: none;
+  color: var(--black);
+}
 .main-info__list-item p span {
   color: var(--light-gray);
 }
+

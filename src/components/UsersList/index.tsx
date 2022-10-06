@@ -33,8 +33,8 @@ const UsersList: FC<IUserList> = ({ people }) => {
           const personDate = new Date(person.birthday)
           const nextPersonDate = people[index + 1] ? new Date(people[index + 1].birthday) : null
           return (
-            <div className='user'>
-              <div className='user-container' key={person.id}>
+            <div className='user' key={person.id}>
+              <div className='user-container'>
                 <Link to={`/user/${person.id}`} className='user__image-container'>
                   <img src={person.avatarUrl}
                     onError={imgErrorHandler} />
