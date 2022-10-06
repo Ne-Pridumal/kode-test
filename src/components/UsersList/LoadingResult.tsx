@@ -7,8 +7,8 @@ const LoadingResult: FC = () => {
     <>
       {
         loadingArray.map((_: any, index: number) => (
-          <div className='user user_loading-result'>
-            <div className='user-container' key={index}>
+          <div className='user user_loading-result' key={index}>
+            <div className='user-container'>
               <div className='user__image-container'>
               </div>
               <div className='user__info-container'>

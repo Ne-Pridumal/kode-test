@@ -4,6 +4,7 @@ import { EFilter } from "../../types/EFilter"
 import { IPerson } from '../../types/IPerson'
 import { WorkspaceStateLoading } from "../../types/WorkspaceState"
 import { RootState } from "../routers"
+import { setDefaultDetailsValue } from "../routers/details"
 import { setDepartment, setPeople, setWorkspaceState } from "../routers/workspace"
 import { filterByParam, filterBySearch } from "./workspaceActions"
 
@@ -18,7 +19,7 @@ export const allPeopleQuery = () => {
       dispatch(setWorkspaceState(WorkspaceStateLoading.loading))
       const response = await axios.get<IResponse>(
         'https://stoplight.io/mocks/kode-frontend-team/koder-stoplight/86566464/users', {
-        params: { __dynamic: true }
+        params: { __dynamic: true, __example: 'all' }
       })
       dispatch(setDepartment(EWorkspaceDepartments.all))
       dispatch(setPeople(response.data.items))
@@ -53,4 +54,19 @@ export const peopleDepartmentQuery = (department: EWorkspaceDepartments) => {
     }
   }
 }
-
+export const peopleIdQuery = (id: string | undefined) => {
+  return async (dispatch: any, useState: () => RootState) => {
+    try {
+      dispatch(setWorkspaceState(WorkspaceStateLoading.loading))
+      const response = await axios.get<IResponse>('https://stoplight.io/mocks/kode-frontend-team/koder-stoplight/86566464/users', {
+        params: { id: id, __dynamic: true }
+      })
+      dispatch(setDefaultDetailsValue(response.data.items[0]))
+      dispatch(setWorkspaceState(WorkspaceStateLoading.success))
+    }
+    catch (e) {
+      dispatch(setPeople(null))
+      dispatch(setWorkspaceState(WorkspaceStateLoading.crashed))
+    }
+  }
+}

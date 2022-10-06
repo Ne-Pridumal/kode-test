@@ -9,17 +9,12 @@ import './index.css'
 
 
 const DepartmentsList: FC = () => {
-  const [activeDepartment, setActiveDepartment] = useState<EWorkspaceDepartments>(EWorkspaceDepartments.all)
   const dispatch = useDispatch()
-  const { state } = useAppSelector(state => state.workspace)
-
-  useEffect(() => {
-    dispatch(setDepartment(activeDepartment))
-  }, [activeDepartment])
+  const { state, department: activeDepartment } = useAppSelector(state => state.workspace)
 
   const departmentClick = (e: EWorkspaceDepartments) => {
     if (state !== WorkspaceStateLoading.loading) {
-      setActiveDepartment(e)
+      dispatch(setDepartment(e))
     }
   }
 
