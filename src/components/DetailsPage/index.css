@@ -33,6 +33,7 @@
   color: var(--light-gray);
 }
 .details__department{
+  text-transform: capitalize;
   font-weight: 400;
   font-size: 13px;
   line-height: 16px;
@@ -91,3 +92,6 @@
   color: var(--light-gray);
 }
 
+.loading {
+  background-color: linear-gradient(90deg, #F3F3F6 0%, #FAFAFA 100%) !important;
+}

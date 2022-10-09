@@ -9,10 +9,13 @@ import AltImage from '../../assets/Alt.png'
 import './index.css'
 import { WorkspaceStateLoading } from "../../types/WorkspaceState";
 
-const User: FC = () => {
+const DetailsPage: FC = () => {
   const { id } = useParams()
   const { peopleIdQuery } = useAppDispatch()
   useEffect(() => {
+    if (!id) {
+      throw new Error('wrong user id')
+    }
     peopleIdQuery(id)
   }, [])
   const { state } = useAppSelector(state => state.workspace)
@@ -25,7 +28,6 @@ const User: FC = () => {
     currentTarget.onerror = null
     currentTarget.src = AltImage
   }
-
   return (
     <div className="details">
       <div className="top-bar">
@@ -35,13 +37,11 @@ const User: FC = () => {
           </Link>
         </div>
         <div className="top-bar__content">
-          <div className="details__image-container">
-            {state === WorkspaceStateLoading.success &&
-              <img src={details.avatarUrl} onError={imgErrorHandler} />
-            }
+          <div className={`details__image-container `}>
+            <img src={details.avatarUrl} onError={imgErrorHandler} />
           </div>
           <div className="details__info-container">
-            <p className="details__name">
+            <p className={`details__name `}>
               {`${details.firstName} ${details.lastName}`}
               <span className="details__tag">
                 {details.userTag}
@@ -78,4 +78,4 @@ const User: FC = () => {
   )
 }
 
-export default User
+export default DetailsPage

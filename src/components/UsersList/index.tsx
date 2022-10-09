@@ -10,6 +10,7 @@ import LoadingResult from './LoadingResult'
 import AltImage from '../../assets/Alt.png'
 import './index.css'
 import { Link } from 'react-router-dom'
+import CriticalError from './CriticalError'
 
 interface IUserList {
   people: IPerson[] | null
@@ -25,10 +26,9 @@ const UsersList: FC<IUserList> = ({ people }) => {
     currentTarget.onerror = null
     currentTarget.src = AltImage
   }
-
   return (
     <div className='user-list default-margin'>
-      {state === WorkspaceStateLoading.success && people && (people.length > 0
+      {state !== WorkspaceStateLoading.loading && people && (people.length > 0
         ? people.map((person: IPerson, index: number) => {
           const personDate = new Date(person.birthday)
           const nextPersonDate = people[index + 1] ? new Date(people[index + 1].birthday) : null
@@ -76,6 +76,9 @@ const UsersList: FC<IUserList> = ({ people }) => {
       }
       {state === WorkspaceStateLoading.loading && (
         <LoadingResult />
+      )}
+      {state === WorkspaceStateLoading.crashed && !people && (
+        <CriticalError />
       )}
     </div>
   )

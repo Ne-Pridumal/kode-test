@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
-import Home from './components/Home';
-import User from './components/Details';
+import DetailsPage from './components/DetailsPage';
+import HomePage from './components/HomePage';
 
 function App() {
   return (
@@ -9,11 +9,11 @@ function App() {
       <Routes>
         <Route
           index
-          element={<Home />}
+          element={<HomePage />}
         />
         <Route
           path='/user/:id'
-          element={<User />}
+          element={<DetailsPage />}
         />
       </Routes>
     </Router>

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState, useEffect } from "react";
 import { ReactComponent as SearchIcon } from '../../assets/SearchIcon.svg'
 import { ReactComponent as ShowFilterIcon } from '../../assets/ShowFilterIcon.svg'
 import './index.css'
@@ -9,15 +9,19 @@ import { setFilterDiplay } from "../../store/routers/workspace";
 const SearchInput: FC = () => {
   const { filterBySearch } = useAppDispatch()
   const { searchInput } = useAppSelector(state => state.workspace)
+  const [searchValue, setSearchValue] = useState<string>(searchInput)
   const dispatch = useDispatch()
+  useEffect(() => {
+    filterBySearch(searchValue)
+  }, [searchValue])
   return (
     <div className="search default-margin">
       <SearchIcon />
       <input
         className="search__input"
         placeholder="Введи имя, тег, почту..."
-        value={searchInput}
-        onChange={(e) => filterBySearch(e.target.value)}
+        value={searchValue}
+        onChange={(e) => setSearchValue(e.target.value)}
       />
       <button
         className="search__filter-button"
