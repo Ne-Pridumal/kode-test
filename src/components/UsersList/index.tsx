@@ -10,31 +10,41 @@ import LoadingResult from './LoadingResult'
 import AltImage from '../../assets/Alt.png'
 import './index.css'
 import { Link } from 'react-router-dom'
+import CriticalError from './CriticalError'
 
 interface IUserList {
   people: IPerson[] | null
 }
 
+const nowMonth = new Date().getUTCMonth()
+const nowDay = new Date().getUTCDate()
+const nowYear = new Date().getFullYear()
 
 const UsersList: FC<IUserList> = ({ people }) => {
   const { filter, state } = useAppSelector(state => state.workspace)
-  const nowMonth = new Date().getUTCMonth()
-  const nowDay = new Date().getUTCDate()
   const imgErrorHandler = (e: SyntheticEvent<HTMLImageElement, Event>) => {
     const { currentTarget } = e
     currentTarget.onerror = null
     currentTarget.src = AltImage
   }
-
   return (
     <div className='user-list default-margin'>
-      {state === WorkspaceStateLoading.success && people && (people.length > 0
+      {state !== WorkspaceStateLoading.loading && people && (people.length > 0
         ? people.map((person: IPerson, index: number) => {
           const personDate = new Date(person.birthday)
-          const nextPersonDate = people[index + 1] ? new Date(people[index + 1].birthday) : null
+          const prevPersonDate = people[index - 1] ? new Date(people[index - 1].birthday) : null
           return (
             <div className='user' key={person.id}>
               <div className='user-container'>
+                {(filter === EFilter.birthday && prevPersonDate
+                  && new Date(nowYear, nowMonth, nowDay) < new Date(nowYear, prevPersonDate.getUTCMonth(), prevPersonDate.getUTCDate())
+                  && new Date(nowYear, nowMonth, nowDay) > new Date(nowYear, personDate.getUTCMonth(), personDate.getUTCDate())) && (
+                    <Separator />
+                  )}
+                {(filter === EFilter.birthday && !prevPersonDate
+                  && new Date(nowYear, nowMonth, nowDay) > new Date(nowYear, personDate.getUTCMonth(), personDate.getUTCDate())) && (
+                    <Separator />
+                  )}
                 <Link to={`/user/${person.id}`} className='user__image-container'>
                   <img src={person.avatarUrl}
                     onError={imgErrorHandler} />
@@ -63,11 +73,6 @@ const UsersList: FC<IUserList> = ({ people }) => {
                     })}
                   </div>
                 )}
-                {(filter === EFilter.birthday && nextPersonDate
-                  && new Date(2022, nowMonth, nowDay) > new Date(2022, nextPersonDate.getUTCMonth(), nextPersonDate.getUTCDate())
-                  && new Date(2022, nowMonth, nowDay) < new Date(2022, personDate.getUTCMonth(), personDate.getUTCDate())) && (
-                    <Separator />
-                  )}
               </div>
             </div>
           )
@@ -76,6 +81,9 @@ const UsersList: FC<IUserList> = ({ people }) => {
       }
       {state === WorkspaceStateLoading.loading && (
         <LoadingResult />
+      )}
+      {state === WorkspaceStateLoading.crashed && !people && (
+        <CriticalError />
       )}
     </div>
   )
