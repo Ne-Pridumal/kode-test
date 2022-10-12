@@ -11,6 +11,7 @@ const HomePage: FC = () => {
   const { peopleDepartmentQuery, allPeopleQuery } = useAppDispatch()
   const { people, department, searchResult, displayFilter } = useAppSelector(state => state.workspace)
   useEffect(() => {
+    // раздельные запросы только для теста, по идее можно просто использовать peopleDepartmentQuery(EWorkspaceDepartments.all)
     if (department === EWorkspaceDepartments.all) {
       allPeopleQuery()
     }

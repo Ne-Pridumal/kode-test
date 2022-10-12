@@ -92,6 +92,3 @@
   color: var(--light-gray);
 }
 
-.loading {
-  background-color: linear-gradient(90deg, #F3F3F6 0%, #FAFAFA 100%) !important;
-}

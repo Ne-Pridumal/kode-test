@@ -13,7 +13,8 @@ interface IResponse {
   items: IPerson[]
 }
 interface ILocalStorage {
-  people: IPerson[]
+  people: IPerson[],
+  timer: number
 }
 
 const saveDateLocaly = (name: string, timeMS: number, data: object) => {
@@ -25,11 +26,22 @@ const saveDateLocaly = (name: string, timeMS: number, data: object) => {
 export const allPeopleQuery = () => {
   return async (dispatch: any, useState: () => RootState) => {
     const state = useState().workspace
+    const localState = localStorage.getItem(WORKSPACE_STORAGE_NAME)
+    if (state.state === WorkspaceStateLoading.crashed && !!localState) {
+      const localJson: ILocalStorage = JSON.parse(localState)
+      if (localJson.timer > Date.now()) {
+        dispatch(setDepartment(EWorkspaceDepartments.all))
+        dispatch(setPeople(localJson.people))
+        dispatch(filterByParam(state.filter))
+        return;
+      }
+    }
+
     try {
       dispatch(setWorkspaceState(WorkspaceStateLoading.loading))
       const response = await axios.get<IResponse>(
         'https://stoplight.io/mocks/kode-frontend-team/koder-stoplight/86566464/users', {
-        params: { __dynamic: true, __example: 'all' }
+        params: { __dynamic: true, }
       })
       dispatch(setDepartment(EWorkspaceDepartments.all))
       dispatch(setPeople(response.data.items))
@@ -40,15 +52,15 @@ export const allPeopleQuery = () => {
       return;
     }
     catch (e) {
-      const localDataString = localStorage.getItem(WORKSPACE_STORAGE_NAME)
       dispatch(setWorkspaceState(WorkspaceStateLoading.crashed))
       dispatch(setDepartment(EWorkspaceDepartments.all))
-      if (!localDataString) {
+      if (!localState) {
         dispatch(setPeople(null))
         return;
       }
-      const localData: ILocalStorage = JSON.parse(localDataString)
+      const localData: ILocalStorage = JSON.parse(localState)
       dispatch(setPeople(localData.people))
+      dispatch(filterByParam(state.filter))
       return;
     }
   }
@@ -57,6 +69,17 @@ export const allPeopleQuery = () => {
 export const peopleDepartmentQuery = (department: EWorkspaceDepartments) => {
   return async (dispatch: any, useState: () => RootState) => {
     const state = useState().workspace
+    const localState = localStorage.getItem(WORKSPACE_STORAGE_NAME)
+    if (state.state === WorkspaceStateLoading.crashed && !!localState) {
+      const localJson: ILocalStorage = JSON.parse(localState)
+      if (localJson.timer > Date.now()) {
+        dispatch(setDepartment(department))
+        const filteredList = localJson.people.filter(p => p.department === `${department}`)
+        dispatch(setPeople(filteredList))
+        dispatch(filterByParam(state.filter))
+        return;
+      }
+    }
     try {
       dispatch(setWorkspaceState(WorkspaceStateLoading.loading))
       const response = await axios.get<IResponse>('https://stoplight.io/mocks/kode-frontend-team/koder-stoplight/86566464/users', {
@@ -79,17 +102,9 @@ export const peopleDepartmentQuery = (department: EWorkspaceDepartments) => {
         return;
       }
       const localData: ILocalStorage = JSON.parse(localDataString)
-      console.log(localData)
-      let filterdByDepartmentList
-      if (department !== EWorkspaceDepartments.all) {
-        filterdByDepartmentList = localData?.people
-          ? localData.people.filter(p => p.department === `${department}`)
-          : null
-      }
-      else {
-        filterdByDepartmentList = localData.people
-      }
-      dispatch(setPeople(filterdByDepartmentList))
+      const filteredList = localData.people.filter(p => p.department === `${department}`)
+      dispatch(setPeople(filteredList))
+      dispatch(filterByParam(state.filter))
       return;
     }
   }

@@ -12,7 +12,10 @@ const SearchInput: FC = () => {
   const [searchValue, setSearchValue] = useState<string>(searchInput)
   const dispatch = useDispatch()
   useEffect(() => {
-    filterBySearch(searchValue)
+    const typeDelay = setTimeout(() => {
+      filterBySearch(searchValue)
+    }, 500)
+    return () => clearTimeout(typeDelay)
   }, [searchValue])
   return (
     <div className="search default-margin">

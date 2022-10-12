@@ -18,7 +18,6 @@ const DetailsPage: FC = () => {
     }
     peopleIdQuery(id)
   }, [])
-  const { state } = useAppSelector(state => state.workspace)
   const details = useAppSelector(state => state.details)
   const personDate = !!details.birthday ? new Date(details.birthday) : null
   const yearDiffMS = personDate ? new Date().getTime() - personDate.getTime() : null
@@ -37,7 +36,7 @@ const DetailsPage: FC = () => {
           </Link>
         </div>
         <div className="top-bar__content">
-          <div className={`details__image-container `}>
+          <div className={`details__image-container`}>
             <img src={details.avatarUrl} onError={imgErrorHandler} />
           </div>
           <div className="details__info-container">
@@ -48,7 +47,7 @@ const DetailsPage: FC = () => {
               </span>
             </p>
             <p className="details__department">
-              {details.department}
+              {details.position}
             </p>
           </div>
         </div>
