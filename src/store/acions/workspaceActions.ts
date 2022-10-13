@@ -7,12 +7,15 @@ import { WorkspaceAction, WorkspaceActionType } from "../routers/workspace"
 
 export const filterBySearch = (search: string | undefined) => (dispatch: Dispatch<WorkspaceActionType>, getState: () => RootState) => {
   const state = getState()
-  let filteredPeople, searchInput
+  let filteredPeople: IPerson[] | null, searchInput: string
   if (state.workspace.people && search) {
     searchInput = search
+    const searchLowerValue = search.toLowerCase()
     filteredPeople = state.workspace.people.filter((person: IPerson) => {
       const personFullName = `${person.firstName} ${person.lastName}`.toLowerCase()
-      if (personFullName.includes(search.toLowerCase()) || person.phone.includes(search)) {
+      if (personFullName.includes(searchLowerValue)
+        || person.phone.includes(searchLowerValue)
+        || person.userTag.toLowerCase().includes(searchLowerValue)) {
         return person
       }
     })
