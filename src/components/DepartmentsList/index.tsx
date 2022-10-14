@@ -1,6 +1,6 @@
-import { FC, useEffect, useState } from "react";
+import { FC, } from "react";
 import { useDispatch } from "react-redux";
-import { useAppSelector } from "../../hooks/useReduxHooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/useReduxHooks";
 import { setDepartment } from "../../store/routers/workspace";
 import { EWorkspaceDepartments, verstkaDepartmentsList } from '../../types/Department'
 import { WorkspaceStateLoading } from "../../types/WorkspaceState";
@@ -9,12 +9,19 @@ import './index.css'
 
 
 const DepartmentsList: FC = () => {
+  const { allPeopleQuery, peopleDepartmentQuery } = useAppDispatch()
   const dispatch = useDispatch()
   const { state, department: activeDepartment } = useAppSelector(state => state.workspace)
 
   const departmentClick = (e: EWorkspaceDepartments) => {
     if (state !== WorkspaceStateLoading.loading) {
       dispatch(setDepartment(e))
+      if (e === EWorkspaceDepartments.all) {
+        allPeopleQuery()
+      }
+      else {
+        peopleDepartmentQuery(e)
+      }
     }
   }
 

@@ -112,27 +112,37 @@ export const peopleDepartmentQuery = (department: EWorkspaceDepartments) => {
 
 export const peopleIdQuery = (id: string) => {
   return async (dispatch: any, useState: () => RootState) => {
-    try {
-      dispatch(setWorkspaceState(WorkspaceStateLoading.loading))
-      const response = await axios.get<IResponse>('https://stoplight.io/mocks/kode-frontend-team/koder-stoplight/86566464/users', {
-        params: { id, __dynamic: true }
-      })
-      dispatch(setDefaultDetailsValue(response.data.items[0]))
-      dispatch(setWorkspaceState(WorkspaceStateLoading.success))
-    }
-    catch (e) {
-      const localDataString = localStorage.getItem(WORKSPACE_STORAGE_NAME)
-      dispatch(setWorkspaceState(WorkspaceStateLoading.crashed))
-      if (!localDataString) {
-        dispatch(setPeople(null))
+    const { workspace } = useState()
+    if (workspace.people === null) {
+      try {
+        dispatch(setWorkspaceState(WorkspaceStateLoading.loading))
+        const response = await axios.get<IResponse>('https://stoplight.io/mocks/kode-frontend-team/koder-stoplight/86566464/users', {
+          params: { id, __dynamic: true }
+        })
+        dispatch(setDefaultDetailsValue(response.data.items[0]))
+        dispatch(setWorkspaceState(WorkspaceStateLoading.success))
+      }
+      catch (e) {
+        const localDataString = localStorage.getItem(WORKSPACE_STORAGE_NAME)
+        dispatch(setWorkspaceState(WorkspaceStateLoading.crashed))
+        if (!localDataString) {
+          dispatch(setPeople(null))
+          return;
+        }
+        const localData: ILocalStorage = JSON.parse(localDataString)
+        const person = localData.people.find(p => p.id === id)
+        if (person) {
+          dispatch(setDefaultDetailsValue(person))
+        }
         return;
       }
-      const localData: ILocalStorage = JSON.parse(localDataString)
-      const person = localData.people.find(p => p.id === id)
-      if (person) {
-        dispatch(setDefaultDetailsValue(person))
-      }
-      return;
     }
+    dispatch(setWorkspaceState(WorkspaceStateLoading.loading))
+    const person = workspace.people!.find(p => p.id === id)
+    if (person) {
+      dispatch(setDefaultDetailsValue(person))
+    }
+    dispatch(setWorkspaceState(WorkspaceStateLoading.success))
+    return;
   }
 }

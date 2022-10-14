@@ -1,6 +1,5 @@
 import { FC, useEffect, } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/useReduxHooks";
-import { WORKSPACE_STORAGE_NAME } from "../../types/consts";
 import { EWorkspaceDepartments } from "../../types/Department";
 import FilterModal from "../FilterModal";
 import TopBar from "../TopBar";
@@ -8,15 +7,12 @@ import UsersList from "../UsersList";
 import './index.css'
 
 const HomePage: FC = () => {
-  const { peopleDepartmentQuery, allPeopleQuery } = useAppDispatch()
+  const { allPeopleQuery } = useAppDispatch()
   const { people, department, searchResult, displayFilter } = useAppSelector(state => state.workspace)
   useEffect(() => {
     // раздельные запросы только для теста, по идее можно просто использовать peopleDepartmentQuery(EWorkspaceDepartments.all)
-    if (department === EWorkspaceDepartments.all) {
+    if (department === EWorkspaceDepartments.all && people === null) {
       allPeopleQuery()
-    }
-    else {
-      peopleDepartmentQuery(department)
     }
   }, [department])
 
